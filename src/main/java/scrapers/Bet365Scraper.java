@@ -1,10 +1,13 @@
 package scrapers;
 
-import com.gargoylesoftware.htmlunit.*;
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.SilentCssErrorHandler;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 
 import java.io.IOException;
-import java.net.URL;
 
 /**
  * Created by Amanda on 20/02/2017.
@@ -12,17 +15,34 @@ import java.net.URL;
 public class Bet365Scraper {
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        /*Element doc = Jsoup.connect("http://www.bet365.com").get();
-        Elements link = doc.select("a[href]");
-        //System.out.println(link);
+        Element doc = Jsoup.connect("http://www.bet365.com").get();
+        Element link = doc.select("a[href*=home]").first();
+        System.out.println(link);
+        String url = link.attr("href");
 
         //scrape first link
-        Element doc1 = Jsoup.connect("https://www.bet365.com/?lng=1&cb=1032558600#/HO/").get();
+        Element doc1 = Jsoup.connect(url).get();
         //System.out.println(doc1);
-        Elements scripts = doc.select("script");
-        //System.out.println(scripts);*/
 
-        WebClient webClient = new WebClient(BrowserVersion.FIREFOX_3_6);
+        java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(java.util.logging.Level.OFF);
+        WebClient client = new WebClient(BrowserVersion.CHROME);
+        client.getOptions().setJavaScriptEnabled(true);
+        client.getOptions().setThrowExceptionOnScriptError(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setUseInsecureSSL(true);
+        client.setCssErrorHandler(new SilentCssErrorHandler());
+        client.setJavaScriptTimeout(6000);
+
+
+        HtmlPage page1 = client.getPage("https://www.bet365.com/home/default.asp?lng=");
+        client.waitForBackgroundJavaScript(15000);
+        //System.out.println(page1.asText());
+
+        client.closeAllWindows();
+
+        System.out.println(page1.asXml());
+
+        /*WebClient webClient = new WebClient(BrowserVersion.FIREFOX_3_6);
         webClient.setIncorrectnessListener(new IncorrectnessListener() {
             public void notify(String s, Object o) {
 
@@ -54,7 +74,7 @@ public class Bet365Scraper {
 
         webClient.getAjaxController().processSynchron(page, request, false);
 
-        System.out.println(page.asXml());
+        System.out.println(page.asXml());*/
 
        /* WebClient webClient = new WebClient();//htmlunit
         webClient.getJavaScriptEngine();
