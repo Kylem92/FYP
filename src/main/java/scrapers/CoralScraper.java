@@ -16,8 +16,13 @@ import java.io.IOException;
  */
 public class CoralScraper {
 
-    public static void main(String [] args) throws IOException {
-        Element doc = Jsoup.connect("http://www.coral.co.uk").get();
+    public CoralScraper(String Team) {
+        Element doc = null;
+        try {
+            doc = Jsoup.connect("http://www.coral.co.uk").get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Elements link = doc.select("a[href*=sports]");
         String textLink = link.attr("href");
         System.out.println(textLink);
@@ -38,8 +43,12 @@ public class CoralScraper {
         client.setJavaScriptTimeout(3000);
 
 
-
-        HtmlPage page = client.getPage(textLink);
+        HtmlPage page = null;
+        try {
+            page = client.getPage(textLink);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         client.waitForBackgroundJavaScript(5000);
         //System.out.println(page.asXml());
@@ -52,12 +61,22 @@ public class CoralScraper {
         String premLink = links.attr("href");
         System.out.println(premLink);
 
-        Element prem = Jsoup.connect(premLink).get();
-        Elements event = prem.select("a[href*=Arsenal]");
+        Element prem = null;
+        try {
+            prem = Jsoup.connect(premLink).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Elements event = prem.select("a[href*="+Team+"]");
         String eventLink = event.attr("href");
         System.out.println(eventLink);
 
-        Element oddPage = Jsoup.connect(eventLink).get();
+        Element oddPage = null;
+        try {
+            oddPage = Jsoup.connect(eventLink).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Elements odds = oddPage.select("span.odds-fractional");
         System.out.println(odds);
 

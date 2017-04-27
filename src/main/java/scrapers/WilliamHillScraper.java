@@ -10,20 +10,35 @@ import java.io.IOException;
  * Created by Amanda on 25/04/2017.
  */
 public class WilliamHillScraper {
-    public static void main(String [] args) throws IOException {
+    public WilliamHillScraper(String Team) {
 
-        Element doc = Jsoup.connect("http://sports.williamhill.com/bet/en-gb").get();
+        Element doc = null;
+        try {
+            doc = Jsoup.connect("http://sports.williamhill.com/bet/en-gb").get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Element link = doc.select("a[href*=English+Premier]").first();
         String textLink = link.attr("href");
         //System.out.println(link);
 
-        Element doc1 = Jsoup.connect(textLink).get();
+        Element doc1 = null;
+        try {
+            doc1 = Jsoup.connect(textLink).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //System.out.println(doc1);
-        Elements links = doc1.select("a[href*=Chelsea]");
+        Elements links = doc1.select("a[href*="+Team+"]");
         String eventLink = links.attr("href");
         System.out.println(eventLink);
 
-        Element doc2 = Jsoup.connect(eventLink).get();
+        Element doc2 = null;
+        try {
+            doc2 = Jsoup.connect(eventLink).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //System.out.println(doc2);
 
         //Elements spans = doc2.select("div.suspended");

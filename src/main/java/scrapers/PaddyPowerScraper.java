@@ -18,22 +18,37 @@ import java.util.regex.Pattern;
 public class PaddyPowerScraper {
 
 
-        public static void main (String[]args) throws IOException {
+        public PaddyPowerScraper(String Team) {
 
 
-            Element doc = Jsoup.connect("http://www.paddypower.com").timeout(1000).userAgent("Mozilla").get().getElementById("nav_quicklinks");
+            Element doc = null;
+            try {
+                doc = Jsoup.connect("http://www.paddypower.com").timeout(1000).userAgent("Mozilla").get().getElementById("nav_quicklinks");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             Elements link = doc.select("a[title*=Football Betting]");
 
             System.out.println(link);
             String url = link.attr("href");
             System.out.println("This is the url " + url);
 
-            Document doc1 = Jsoup.connect(url).get();
+            Document doc1 = null;
+            try {
+                doc1 = Jsoup.connect(url).get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             Elements link2 = doc1.select("a[href*=premier-league]");
             String url2 = link2.attr("href");
             System.out.println(url2);
 
-            Document doc2 = Jsoup.connect(url2).get();
+            Document doc2 = null;
+            try {
+                doc2 = Jsoup.connect(url2).get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             //System.out.println(doc2);
 
             ArrayList links = new ArrayList();
@@ -42,13 +57,18 @@ public class PaddyPowerScraper {
             Matcher m = p.matcher(String.valueOf(doc2));
             while (m.find()) {
                 String urlStr = m.group();
-                if (urlStr.contains("Arsenal")) {
+                if (urlStr.contains(Team)) {
                     links.add(urlStr+"\n");
                 }
             }
             System.out.println(links);
 
-            Document finalDoc = Jsoup.connect(String.valueOf(links.get(0))).get();
+            Document finalDoc = null;
+            try {
+                finalDoc = Jsoup.connect(String.valueOf(links.get(0))).get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             //System.out.println(finalDoc);
 
 

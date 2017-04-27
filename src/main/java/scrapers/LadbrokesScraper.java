@@ -8,13 +8,20 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
+
 /**
  * Created by Amanda on 20/02/2017.
  */
 public class LadbrokesScraper {
-    public static void main (String[]args) throws Exception {
+    public LadbrokesScraper(String Team) {
 
-        Element doc = Jsoup.connect("http://www.ladbrokes.com").get();
+        Element doc = null;
+        try {
+            doc = Jsoup.connect("http://www.ladbrokes.com").get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Elements link = doc.select("a[href*=football]");
         String textLink = link.attr("href");
         System.out.println(textLink);
@@ -37,10 +44,14 @@ public class LadbrokesScraper {
             client.setJavaScriptTimeout(5000);
 
 
+        HtmlPage page = null;
+        try {
+            page = client.getPage(textLink);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            HtmlPage page = client.getPage(textLink);
-
-            client.waitForBackgroundJavaScript(5000);
+        client.waitForBackgroundJavaScript(5000);
             System.out.println(page.asText());
             client.closeAllWindows();
 
