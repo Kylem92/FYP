@@ -15,11 +15,19 @@ import java.util.regex.Pattern;
 /**
  * Created by Kyle on 17/10/2016.
  */
-public class PaddyPowerScraper {
+public class PaddyPowerScraper implements Runnable{
 
+    private String[] odds1 = new String[10];
+    private String Team;
+    private Thread t;
 
-        public PaddyPowerScraper(String Team) {
+        public PaddyPowerScraper(String Team) throws IOException {
+            this.Team= Team;
 
+            this.start();
+        }
+
+        public void run() {
 
             Element doc = null;
             try {
@@ -29,9 +37,9 @@ public class PaddyPowerScraper {
             }
             Elements link = doc.select("a[title*=Football Betting]");
 
-            System.out.println(link);
+            //System.out.println(link);
             String url = link.attr("href");
-            System.out.println("This is the url " + url);
+            //System.out.println("This is the url " + url);
 
             Document doc1 = null;
             try {
@@ -41,7 +49,7 @@ public class PaddyPowerScraper {
             }
             Elements link2 = doc1.select("a[href*=premier-league]");
             String url2 = link2.attr("href");
-            System.out.println(url2);
+            //System.out.println(url2);
 
             Document doc2 = null;
             try {
@@ -61,7 +69,7 @@ public class PaddyPowerScraper {
                     links.add(urlStr+"\n");
                 }
             }
-            System.out.println(links);
+            //System.out.println(links);
 
             Document finalDoc = null;
             try {
@@ -74,13 +82,20 @@ public class PaddyPowerScraper {
 
             //Elements spans = doc2.select("span.odds-value:lt(2)");
             //Elements spans = doc2.select("span.sub_market_name:contains(Win-Draw-Win) > span.odds-value");
-            Elements spans = finalDoc.select("div.fb-odds-group.item");
+            Element spans = finalDoc.select("div.fb-odds-group.item").get(0);
             //Elements finOdd = spans.select("span.sub_market_name:contains(Win-Draw-Win)");
             //System.out.println(finOdd);
             String finalOdds = html2text(String.valueOf(spans));
-            System.out.println(finalOdds);
+            System.out.println("paddy   "+finalOdds);
         }
 
+    public void start () {
+
+        if (t == null) {
+            t = new Thread(this);
+            t.start();
+        }
+    }
 
            /*
 
@@ -155,6 +170,16 @@ public class PaddyPowerScraper {
         Document doc = Jsoup.connect(url).get();
 
     }
+
+    public String[] getOdds() {
+        return odds1;
+    }
+
+    public String getOddsString() {
+        return "win: " + odds1[0] + "\ndraw: " + odds1[1] + "\nlose: " + odds1[2];
+    }
+
+
 
 }
 

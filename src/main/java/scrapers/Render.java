@@ -27,7 +27,7 @@ public class Render extends Application {
         Thread t = new Thread() {
             @Override
             public void run() {
-                new Render().start(new Stage()); //EDIT: copy/paste mistake
+                new Render().start(new Stage());
             }
         };
 

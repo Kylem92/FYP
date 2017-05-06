@@ -42,7 +42,8 @@ public class Bet365Scraper {
 
         System.out.println(page1.asXml());
 
-        /*WebClient webClient = new WebClient(BrowserVersion.FIREFOX_3_6);
+        /*
+        WebClient webClient = new WebClient(BrowserVersion.FIREFOX_3_6);
         webClient.setIncorrectnessListener(new IncorrectnessListener() {
             public void notify(String s, Object o) {
 
@@ -74,15 +75,15 @@ public class Bet365Scraper {
 
         webClient.getAjaxController().processSynchron(page, request, false);
 
-        System.out.println(page.asXml());*/
+        System.out.println(page.asXml());
 
-       /* WebClient webClient = new WebClient();//htmlunit
+        WebClient webClient = new WebClient();//htmlunit
         webClient.getJavaScriptEngine();
         Page page = webClient.getPage("http://www.boylesports.com/betting");
         webClient.waitForBackgroundJavaScript(10000);
         WebResponse response = page.getWebResponse();
         String content = response.getContentAsString();
-        System.out.println(content);*/
+        System.out.println(content);
 
         //String url = "http://www.boylesports.com/betting";
         //WebClient webClient = new WebClient();
@@ -90,7 +91,7 @@ public class Bet365Scraper {
         //System.out.println(myPage);
 
 
-        /*WebClient webClient = new WebClient();
+        WebClient webClient = new WebClient();
         HtmlPage page = null;
         try {
             page = webClient.getPage("http://www.boylesports.com/betting");

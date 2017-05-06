@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TwitterScrape.iml" filepath="$PROJECT_DIR$/TwitterScrape.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SimScrape.iml" filepath="$PROJECT_DIR$/SimScrape.iml" />
     </modules>
   </component>
 </project>

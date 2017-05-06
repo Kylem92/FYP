@@ -14,9 +14,18 @@ import java.io.IOException;
 /**
  * Created by Amanda on 25/04/2017.
  */
-public class CoralScraper {
+public class CoralScraper implements Runnable{
 
-    public CoralScraper(String Team) {
+    private String[] odds1 = new String[10];
+    private String Team;
+    private Thread t;
+
+    public CoralScraper(String Team) throws IOException {
+        this.Team = Team;
+        this.start();
+
+    }
+    public void run(){
         Element doc = null;
         try {
             doc = Jsoup.connect("http://www.coral.co.uk").get();
@@ -25,12 +34,7 @@ public class CoralScraper {
         }
         Elements link = doc.select("a[href*=sports]");
         String textLink = link.attr("href");
-        System.out.println(textLink);
-
-        //Element doc1 = Jsoup.connect(textLink).get();
-        //Elements links = doc1.select("a[href]");
-        //String textLink = link.attr("href");
-        //System.out.println(doc1);
+        //System.out.println(textLink);
 
         java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(java.util.logging.Level.OFF);
         WebClient client = new WebClient(BrowserVersion.CHROME);
@@ -50,7 +54,7 @@ public class CoralScraper {
             e.printStackTrace();
         }
 
-        client.waitForBackgroundJavaScript(5000);
+        client.waitForBackgroundJavaScript(3000);
         //System.out.println(page.asXml());
         client.closeAllWindows();
 
@@ -59,7 +63,7 @@ public class CoralScraper {
         Elements links = docs.select("a[href*=england/premier-league]");
         //System.out.println(links);
         String premLink = links.attr("href");
-        System.out.println(premLink);
+        //System.out.println(premLink);
 
         Element prem = null;
         try {
@@ -69,24 +73,43 @@ public class CoralScraper {
         }
         Elements event = prem.select("a[href*="+Team+"]");
         String eventLink = event.attr("href");
-        System.out.println(eventLink);
+        //System.out.println(eventLink);
 
-        Element oddPage = null;
+        Document oddPage = null;
         try {
             oddPage = Jsoup.connect(eventLink).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Elements odds = oddPage.select("span.odds-fractional");
-        System.out.println(odds);
+
+       /* Elements odds = oddPage.select("tr.body-row");
+        Elements duv = odds.select("div.bet-price");
+        Document doc1 = Jsoup.parse(String.valueOf(odds));
+        System.out.print(duv);*/
 
 
-        Element win = oddPage.select("div.bet-price > span.odds-fractional").get(0);
-        Element drw = oddPage.select("div.bet-price > span.odds-fractional").get(1);
-        Element lose = oddPage.select("div.bet-price > span.odds-fractional").get(2);
+
+        Element win = oddPage.select("span.odds-fractional").get(267);
+        Element drw = oddPage.select("span.odds-fractional").get(268);
+        Element lose = oddPage.select("span.odds-fractional").get(269);
         String w = win.text();
         String d = drw.text();
         String l = lose.text();
-        System.out.println("To win "+w + " To draw " + d + " To lose " + l);
+
+        System.out.println("Coral To win "+w + " To draw " + d + " To lose " + l);
+    }
+    public void start () {
+
+        if (t == null) {
+            t = new Thread(this);
+            t.start();
+        }
+    }
+    public String[] getOdds() {
+        return odds1;
+    }
+
+    public String getOddsString() {
+        return "win: " + odds1[0] + "\ndraw: " + odds1[1] + "\nlose: " + odds1[2];
     }
 }

@@ -33,6 +33,9 @@ public class selenium {
         System.out.println("quitting webdriver");
         driver.quit();
     }
+    public static void main(String[] args){
+        getHTMLSourceFromURL("http://www.boylesports.com/betting/football/premier-league/matches/?navigationid=23.1,183099.1,183100.1");
+    }
 
     /**
      * creates file with fileName and writes the content

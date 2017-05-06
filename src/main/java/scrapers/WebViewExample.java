@@ -69,9 +69,6 @@ import javafx.stage.Stage;
         Thread.sleep(10000);
         Thread.sleep(10000);
 
-
-
-
         StackPane sp = new StackPane();
         sp.getChildren().add(webView);
 
